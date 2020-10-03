@@ -6,6 +6,7 @@
     "dependencies": {
         "@pulumi/gcp": "^3.0.0",
         "@pulumi/pulumi": "^2.0.0",
-        "@pulumi/random": "^2.3.1"
+        "@pulumi/random": "^2.3.1",
+        "change-case": "^4.1.1"
     }
 }
