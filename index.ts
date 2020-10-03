@@ -1,5 +1,5 @@
 import * as pulumi from "@pulumi/pulumi";
-import { newGCPProject } from "./lib/gcp-project";
+import { newGCPProject } from "./lib/gcp/project";
 import { ProjectService } from "./lib/gcp/services";
 
 const project = newGCPProject("pulumi-experiment", {

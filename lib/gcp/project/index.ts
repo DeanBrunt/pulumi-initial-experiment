@@ -1,7 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
 import * as random from "@pulumi/random";
-import { ProjectService } from "../gcp/services";
+import { ProjectService } from "../services";
 import { paramCase } from "change-case";
 
 interface Options {
