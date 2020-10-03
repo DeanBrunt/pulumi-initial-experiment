@@ -1,5 +1,3 @@
-import { GCPolicy } from "@pulumi/gcp/bigtable";
-
 import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
 import * as random from "@pulumi/random";
