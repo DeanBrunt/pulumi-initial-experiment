@@ -4,49 +4,56 @@ import * as random from "@pulumi/random";
 import { ProjectService } from "../services";
 import { paramCase } from "change-case";
 
-export class Project extends pulumi.ComponentResource {
-    
+interface Arguments {
+    projectName: string;
+    services?: ProjectService[];
+    addRandomSuffixToProjectId?: boolean;
 }
 
-// interface Options {
-//     name: string;
-//     services?: ProjectService[];
-//     addRandomSuffixToProjectId?: boolean;
-// }
+export class Project extends pulumi.ComponentResource {
+    readonly project: gcp.organizations.Project
+    private projectServices: gcp.projects.Service[]
+    
+    constructor(
+        name: string, 
+        {
+            projectName,
+            services = [],
+            addRandomSuffixToProjectId = true,
+        }: Arguments, 
+        opts?: pulumi.ResourceOptions
+    ) {
+        const inputs: pulumi.Inputs = {
+            options: opts,
+        };
+        super("components:gcp:Project", name, inputs, opts);
 
-// export const newGCPProject = (
-//     resourceNameBase: string, 
-//     {
-//         name,
-//         services = [],
-//         addRandomSuffixToProjectId = true,
-//     }: Options,
-// ): gcp.organizations.Project => {
-//     // TODO(DeanBrunt): Find out the proper way to declare this sort of type as this is a bit hacky
-//     let projectId = pulumi.interpolate `${paramCase(name)}`;
-//     if (addRandomSuffixToProjectId) {
-//         const randomSuffix = new random.RandomString(`${resourceNameBase}-project-random-suffix`, {
-//             special: false,
-//             length: 8,
-//             upper: false,
-//             number: false,
-//         });
-//         projectId = pulumi.interpolate `${projectId}-${randomSuffix.result}`
-//     }
+        // Default resource options for this component's child resources.
+        const defaultResourceOptions: pulumi.ResourceOptions = { parent: this };
 
-//     const project = new gcp.organizations.Project(`${resourceNameBase}-project`, {
-//         name,
-//         projectId,
-//     });
+        let projectId = pulumi.output(paramCase(name))
+        if (addRandomSuffixToProjectId) {
+            const randomSuffix = new random.RandomString(`${name}-project-random-suffix`, {
+                special: false,
+                length: 8,
+                upper: false,
+                number: false,
+            }, defaultResourceOptions);
+            projectId = pulumi.interpolate `${projectId}-${randomSuffix.result}`;
+        }
 
-//     services.map(
-//         service => {
-//             new gcp.projects.Service(`${resourceNameBase}-project-service-${service}`, {
-//                 project: project.projectId,
-//                 service: service,
-//             })
-//         }
-//     )
+        this.project = new gcp.organizations.Project(`${name}-project`, {
+            name: projectName,
+            projectId,
+        }, defaultResourceOptions);
 
-//     return project;
-// };
+        this.projectServices = services.map(
+            service => (
+                new gcp.projects.Service(`${name}-project-service-${service}`, {
+                    project: this.project.projectId,
+                    service: service,
+                }, defaultResourceOptions)
+            )
+        )
+    }
+}
