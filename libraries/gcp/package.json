@@ -1,0 +1,14 @@
+{
+    "name": "gcp",
+    "version": "1.0.0",
+    "devDependencies": {
+        "@types/node": "^10.0.0"
+    },
+    "dependencies": {
+        "gcp": "1.0.0",
+        "@pulumi/gcp": "^3.0.0",
+        "@pulumi/pulumi": "^2.0.0",
+        "@pulumi/random": "^2.3.1",
+        "change-case": "^4.1.1"
+    }
+}

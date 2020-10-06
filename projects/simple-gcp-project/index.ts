@@ -1,6 +1,6 @@
 import * as pulumi from "@pulumi/pulumi";
-import { newGCPProject } from "./lib/gcp/project";
-import { ProjectService } from "./lib/gcp/services";
+import { newGCPProject } from "gcp/project";
+import { ProjectService } from "gcp/services";
 
 const project = newGCPProject("pulumi-experiment", {
     name: `${pulumi.getStack()}-pulumi-experiment`,
