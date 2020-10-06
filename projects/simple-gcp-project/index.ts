@@ -1,13 +1,13 @@
 import * as pulumi from "@pulumi/pulumi";
-import { newGCPProject } from "gcp/project";
+import { Project } from "gcp/project";
 import { ProjectService } from "gcp/services";
 
-const project = newGCPProject("pulumi-experiment", {
-    name: `${pulumi.getStack()}-pulumi-experiment`,
+const project = new Project("simple-project", {
+    projectName: `${pulumi.getStack()}-pulumi-experiment`,
     services: [
         ProjectService.CloudBilling,
         ProjectService.CloudResourceManager,
     ],
 });
 
-export const projectId = project.projectId;
+export const projectId = project.project.projectId;
