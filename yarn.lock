@@ -62,7 +62,7 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
-"@pulumi/gcp@^3.0.0":
+"@pulumi/gcp@^3.0.0", "@pulumi/gcp@^3.25.0":
   version "3.25.0"
   resolved "https://registry.yarnpkg.com/@pulumi/gcp/-/gcp-3.25.0.tgz#dd30d2f7432592b146c354d06fff68ae4e00e328"
   integrity sha512-C5yLaaIMBZej+D19fBscRD0O6uHARteyv/TBzseWe1kjIQhgD80RUQFmdgdqYoUH2cu7wUqxB6FYQPwfRGgUQg==

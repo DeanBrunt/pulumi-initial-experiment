@@ -21,7 +21,7 @@ export class Project extends pulumi.ComponentResource {
             services = [],
             addRandomSuffixToProjectId = true,
         }: Arguments, 
-        opts?: pulumi.ResourceOptions
+        opts?: pulumi.ComponentResourceOptions
     ) {
         const inputs: pulumi.Inputs = {
             options: opts,
@@ -29,7 +29,7 @@ export class Project extends pulumi.ComponentResource {
         super("components:gcp:Project", name, inputs, opts);
 
         // Default resource options for this component's child resources.
-        const defaultResourceOptions: pulumi.ResourceOptions = { parent: this };
+        const defaultResourceOptions: pulumi.ComponentResourceOptions = { parent: this };
 
         let projectId = pulumi.output(paramCase(name))
         if (addRandomSuffixToProjectId) {
@@ -38,21 +38,24 @@ export class Project extends pulumi.ComponentResource {
                 length: 8,
                 upper: false,
                 number: false,
-            }, defaultResourceOptions);
+            // PULUMI BUG: This spread syntax is required due to this bug: https://github.com/pulumi/pulumi/issues/3393
+            }, {...defaultResourceOptions});
             projectId = pulumi.interpolate `${projectId}-${randomSuffix.result}`;
         }
 
         this.project = new gcp.organizations.Project(`${name}-project`, {
             name: projectName,
             projectId,
-        }, defaultResourceOptions);
+        // PULUMI BUG: This spread syntax is required due to this bug: https://github.com/pulumi/pulumi/issues/3393
+        }, {...defaultResourceOptions});
 
         this.projectServices = services.map(
             service => (
                 new gcp.projects.Service(`${name}-project-service-${service}`, {
                     project: this.project.projectId,
                     service: service,
-                }, defaultResourceOptions)
+                // PULUMI BUG: This spread syntax is required due to this bug: https://github.com/pulumi/pulumi/issues/3393
+                }, {...defaultResourceOptions})
             )
         )
     }
